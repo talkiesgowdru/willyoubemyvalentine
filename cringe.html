@@ -95,7 +95,7 @@
 <body>
 
     <canvas id="canvas"></canvas>
-    <a href="../apps.html" class="back-nav"><i class="fas fa-arrow-left"></i> Hub</a>
+    <a href="apps.html" class="back-nav"><i class="fas fa-arrow-left"></i> Hub</a>
 
     <div class="app-shell">
         <div class="scroll-stage">
@@ -201,4 +201,5 @@
         function render() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.upd();p.drw();}); requestAnimationFrame(render); } render();
     </script>
 </body>
+
 </html>
