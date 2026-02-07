@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Archive | Sanctuary OS</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #000000;
+            --apple-glass: rgba(28, 28, 30, 0.85);
+            --border: rgba(255, 255, 255, 0.12);
+            --accent: #ff3b30;
+            --safe-bottom: 160px; 
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100svh;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg); color: #fff;
+            overflow: hidden; -webkit-font-smoothing: antialiased;
+        }
+
+        #canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; }
+
+        .back-nav {
+            position: fixed; top: 30px; left: 30px; z-index: 1000;
+            text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+            background: var(--apple-glass); padding: 12px 24px; border-radius: 50px;
+            backdrop-filter: blur(20px); border: 1px solid var(--border);
+        }
+
+        .app-shell {
+            height: 100svh; display: flex; flex-direction: column;
+            box-sizing: border-box; padding-bottom: var(--safe-bottom);
+            position: relative; z-index: 10;
+        }
+
+        .scroll-stage {
+            flex-grow: 1; overflow-y: scroll; padding: 120px 20px 60px;
+            scrollbar-width: none; position: relative;
+        }
+        .scroll-stage::-webkit-scrollbar { display: none; }
+
+        header { text-align: center; margin-bottom: 80px; }
+        header h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 900; letter-spacing: -3px; margin: 0; }
+        
+        .section-label { 
+            text-transform: uppercase; letter-spacing: 5px; font-size: 0.7rem; 
+            color: #86868b; margin: 60px 0 30px; text-align: center; font-weight: 800;
+        }
+
+        .grid { 
+            display: block;
+            column-count: 2; 
+            column-gap: 20px; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            min-height: 200px; /* Forces visibility */
+        }
+
+        .media-card {
+            break-inside: avoid; margin-bottom: 20px;
+            background: var(--apple-glass); border-radius: 24px;
+            border: 1px solid var(--border); overflow: hidden;
+            cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative; background-size: cover;
+        }
+        .media-card:hover { transform: scale(1.02) translateY(-5px); border-color: var(--accent); }
+        
+        /* Ensures cards occupy space even before media loads */
+        .media-card img, .media-card video { 
+            width: 100%; 
+            min-height: 150px; 
+            display: block; 
+            border-radius: 22px; 
+            object-fit: cover;
+        }
+
+        #focusView {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
+            z-index: 5000; display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(40px); padding: 20px;
+        }
+        #focusContainer { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .focus-media { max-width: 95%; max-height: 85vh; border-radius: 20px; box-shadow: 0 50px 100px rgba(0,0,0,1); }
+
+        @media (max-width: 600px) { .grid { column-count: 1; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+    <a href="../apps.html" class="back-nav"><i class="fas fa-arrow-left"></i> Hub</a>
+
+    <div class="app-shell">
+        <div class="scroll-stage">
+            <header><h1>The <span style="color: var(--accent);">Archive</span></h1></header>
+
+            <div class="section-label">Stills & Memes</div>
+            <div class="grid">
+                <div class="media-card" onclick="openFocus(this, 'img')"><img src="meme1.jpg" alt="Meme 1"></div>
+                <div class="media-card" onclick="openFocus(this, 'img')"><img src="meme2.jpg" alt="Meme 2"></div>
+                <div class="media-card" onclick="openFocus(this, 'img')"><img src="meme3.jpg" alt="Meme 3"></div>
+                <div class="media-card" onclick="openFocus(this, 'img')"><img src="meme4.jpg" alt="Meme 4"></div>
+                <div class="media-card" onclick="openFocus(this, 'img')"><img src="meme5.jpg" alt="Meme 5"></div>
+            </div>
+
+            <div class="section-label">Motion Objects</div>
+            <div class="grid">
+                <div class="media-card" onclick="openFocus(this, 'vid')">
+                    <video src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770103926/vide1_o5zepi.mp4" loop muted playsinline preload="auto"></video>
+                </div>
+                <div class="media-card" onclick="openFocus(this, 'vid')">
+                    <video src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770103926/vide2_o11zsb.mp4" loop muted playsinline preload="auto"></video>
+                </div>
+                <div class="media-card" onclick="openFocus(this, 'vid')">
+                    <video src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770103926/vide3_xkmsor.mp4" loop muted playsinline preload="auto"></video>
+                </div>
+                <div class="media-card" onclick="openFocus(this, 'vid')">
+                    <video src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770103927/vide4_rxng19.mp4" loop muted playsinline preload="auto"></video>
+                </div>
+                <div class="media-card" onclick="openFocus(this, 'vid')">
+                    <video src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770103929/vide5_gni5nh.mp4" loop muted playsinline preload="auto"></video>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="focusView">
+        <div onclick="closeFocus()" style="position: absolute; top: 40px; right: 40px; font-size: 2rem; cursor: pointer; z-index: 5001;"><i class="fas fa-times"></i></div>
+        <div id="focusContainer" onclick="closeFocus()"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        function openFocus(el, type) {
+            const container = document.getElementById('focusContainer');
+            const view = document.getElementById('focusView');
+            container.innerHTML = '';
+
+            if(type === 'img') {
+                const img = el.querySelector('img').cloneNode();
+                img.className = 'focus-media';
+                container.appendChild(img);
+            } else {
+                const vid = document.createElement('video');
+                const originalVid = el.querySelector('video');
+                vid.src = originalVid.src;
+                vid.className = 'focus-media';
+                vid.controls = true;
+                vid.autoplay = true;
+                container.appendChild(vid);
+            }
+
+            view.style.display = 'flex';
+            gsap.fromTo(view, {opacity: 0, scale: 0.95}, {opacity: 1, scale: 1, duration: 0.4, ease: "power2.out"});
+        }
+
+        function closeFocus() {
+            const container = document.getElementById('focusContainer');
+            const videos = container.querySelectorAll('video');
+            videos.forEach(v => { v.pause(); v.src = ""; v.load(); v.remove(); });
+            
+            gsap.to("#focusView", {opacity: 0, scale: 0.95, duration: 0.3, onComplete: () => {
+                document.getElementById('focusView').style.display = 'none';
+                container.innerHTML = '';
+            }});
+        }
+
+        // Surgical Kinetic Preview Logic
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.media-card video').forEach(v => {
+                // Ensure muted state for autoplay compliance
+                v.muted = true;
+                v.parentElement.addEventListener('mouseenter', () => {
+                    const playPromise = v.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => { console.log("Autoplay prevented"); });
+                    }
+                });
+                v.parentElement.addEventListener('mouseleave', () => { 
+                    v.pause(); 
+                    v.currentTime = 0; 
+                });
+            });
+        });
+
+        // Atmosphere Dust Simulation
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        let pts = [];
+        class P { constructor() { this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.s=Math.random()*1.2; this.v=Math.random()*0.2; } upd(){ this.y-=this.v; if(this.y<0)this.y=canvas.height; } drw(){ ctx.globalAlpha=0.15; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); } }
+        for(let i=0;i<60;i++) pts.push(new P());
+        function render() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.upd();p.drw();}); requestAnimationFrame(render); } render();
+    </script>
+</body>
+</html>

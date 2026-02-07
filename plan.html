@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Plan Date | Sanctuary OS</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #000000;
+            --apple-glass: rgba(28, 28, 30, 0.5);
+            --border: rgba(255, 255, 255, 0.1);
+            --accent: #ff3b30;
+            --safe-bottom: 140px; 
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100svh;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg); color: #fff;
+            overflow: hidden; -webkit-font-smoothing: antialiased;
+        }
+
+        /* Atmos Physics */
+        #particleCanvas { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.3; }
+
+        .back-nav {
+            position: fixed; top: 30px; left: 30px; z-index: 1000;
+            text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+            background: var(--apple-glass); padding: 12px 24px; border-radius: 50px;
+            backdrop-filter: blur(25px); border: 1px solid var(--border);
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .back-nav:hover { background: #fff; color: #000; }
+
+        /* Master Stage */
+        .stage {
+            height: 100svh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding-bottom: var(--safe-bottom); box-sizing: border-box;
+        }
+
+        /* The Minimalist Command Object */
+        .plan-trigger {
+            text-decoration: none;
+            display: flex; flex-direction: column; align-items: center;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .calendar-tile {
+            width: 180px; height: 180px;
+            background: #ffffff; border-radius: 40px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+            transition: 0.4s;
+        }
+
+        .calendar-tile::before {
+            content: 'FEB';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 45px; background: var(--accent);
+            color: #fff; font-weight: 900; font-size: 0.8rem;
+            display: flex; align-items: center; justify-content: center;
+            letter-spacing: 3px;
+        }
+
+        .calendar-tile span {
+            color: #000; font-size: 5rem; font-weight: 700;
+            margin-top: 30px; letter-spacing: -2px;
+        }
+
+        .app-name {
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 5px; color: #fff; opacity: 0.4;
+            transition: 0.4s;
+        }
+
+        /* Haptic Hover */
+        .plan-trigger:hover { transform: scale(1.05) translateY(-10px); }
+        .plan-trigger:hover .app-name { opacity: 1; letter-spacing: 7px; color: var(--accent); }
+        .plan-trigger:active { transform: scale(0.94); }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <a href="../apps.html" class="back-nav"><i class="fas fa-arrow-left"></i> Hub</a>
+
+    <div class="stage">
+        <a href="https://forms.gle/prA1NqXd81GcaC2V9" class="plan-trigger" target="_blank">
+            <div class="calendar-tile">
+                <span>14</span>
+            </div>
+            <div class="app-name">Plan Date</div>
+        </a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // High-End Particle Engine
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        
+        let pts = [];
+        class P { 
+            constructor() { 
+                this.x = Math.random() * canvas.width; 
+                this.y = Math.random() * canvas.height; 
+                this.s = Math.random() * 1.2; 
+                this.v = Math.random() * 0.2; 
+            } 
+            upd(){ 
+                this.y -= this.v; 
+                if(this.y < 0) this.y = canvas.height; 
+            } 
+            drw(){ 
+                ctx.globalAlpha = 0.2; 
+                ctx.fillStyle = '#ffffff'; 
+                ctx.beginPath(); 
+                ctx.arc(this.x,this.y,this.s,0,Math.PI*2); 
+                ctx.fill(); 
+            }
+        }
+        for(let i = 0; i < 60; i++) pts.push(new P());
+        function render() { 
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            pts.forEach(p => { p.upd(); p.drw(); }); 
+            requestAnimationFrame(render); 
+        } render();
+
+        // Safe Reveal
+        window.onload = () => {
+            gsap.from(".plan-trigger", { 
+                opacity: 0, 
+                scale: 0.9, 
+                y: 20, 
+                duration: 1.5, 
+                ease: "expo.out" 
+            });
+        };
+    </script>
+</body>
+</html>

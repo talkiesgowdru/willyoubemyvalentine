@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Letter | Sanctuary OS</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #000000;
+            --paper: #fcfaf0;
+            --ink: #1a1a1a;
+            --accent: #ff3b30;
+            --safe-bottom: 160px; /* Immunity from Taskbars */
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100svh;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg); color: #fff;
+            overflow: hidden; -webkit-font-smoothing: antialiased;
+        }
+
+        #canvas { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.3; }
+        
+        /* Navigation */
+        .back-nav {
+            position: fixed; top: 30px; left: 30px; z-index: 1000;
+            text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+            background: rgba(28, 28, 30, 0.8); padding: 12px 24px; border-radius: 50px;
+            backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive Container */
+        .app-shell {
+            height: 100svh; display: flex; align-items: center; justify-content: center;
+            padding: 20px 20px var(--safe-bottom); box-sizing: border-box;
+        }
+
+        /* Physical Paper Object */
+        .paper-card {
+            width: 100%; max-width: 700px; height: 100%;
+            background: var(--paper);
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 2.2em;
+            border-radius: 2px;
+            padding: clamp(40px, 8vw, 80px) clamp(30px, 6vw, 60px);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            color: var(--ink);
+            overflow-y: scroll; scrollbar-width: none;
+            position: relative; z-index: 10;
+        }
+        .paper-card::-webkit-scrollbar { display: none; }
+
+        .date { font-weight: 800; font-size: 0.75rem; opacity: 0.4; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px; }
+
+        /* Professional Static Text */
+        .letter-text {
+            font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: clamp(1.3rem, 4vw, 1.9rem); line-height: 1.65;
+            margin: 0; white-space: pre-wrap;
+            color: var(--ink);
+        }
+
+        /* Dynamic Signature Zone */
+        .signature-wrap {
+            margin-top: 80px;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #dynamicSig {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: var(--accent);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #dynamicSig.reveal { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 600px) {
+            .app-shell { padding-bottom: 180px; }
+            .paper-card { padding: 50px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <a href="../apps.html" class="back-nav"><i class="fas fa-arrow-left"></i> Hub</a>
+
+    <div class="app-shell">
+        <div class="paper-card" id="paper">
+            <div class="date">February 01, 2026</div>
+            <p class="letter-text">
+Le nayii 💗🫶 ,
+ನಾನು ನೀನು ನೀನು ನಾನು ಒಂದೇ ಇನ್ನು ಅನ್ನೋದನ್ನು ಒಪ್ಪಿಕೊಂತು ಈ ಹೃದಯ🫀,
+Nen andre onthara sakath ishta kane nan yeste baidru yeste kopa madkondru nane beku anthiya
+
+Nan yeste nin  math na kelskode idru mthe mthe helthiyaaa nang ad ishta 😂🫶💗
+
+Mthe lpr 
+ನೀ ಇಲ್ಲವಾದರೆ ನಾ ಹೇ....ಗೆ ಬಾಳಲೀ?.....
+
+Mthe ninge
+ನೆನಪಿದೆಯೆ ಮೊದಲ ನೋಟ?
+ನೆನಪಿದೆಯೆ ಮೊದಲ... ಸ್ಪರ್ಶ?.....
+ನೆನಪಿದೆಯೆ ಮತ್ತನು ತಂದ
+ಆ ಮೊದಲ ಚುಂಬನಾ? 
+Nang anthu tumbha chennag nenp ide 
+ 
+Nin Pata Pata mathgalu  Nin kopa sittu 
+Nin kushi adyellad kintha nin Alu nan alsalla nan yest chennag nodkothini andre nene albeku devrantha ganda anthaaa athara 😂💗idun yella jeevana poorthi jothe ge iddu nodana ankondiniii
+
+Sooo Will You be My Valentine 💝 🫶
+            </p>
+            
+            <div class="signature-wrap">
+                <div id="dynamicSig">Harshil & Pia Forever</div>
+            </div>
+            
+            <div style="height: 100px;"></div> </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        const paper = document.getElementById('paper');
+        const sig = document.getElementById('dynamicSig');
+
+        // Professional Scroll Tracker for Dynamic Signature
+        paper.addEventListener('scroll', () => {
+            const scrollPos = paper.scrollTop + paper.clientHeight;
+            const scrollMax = paper.scrollHeight - 20;
+            
+            if (scrollPos >= scrollMax) {
+                sig.classList.add('reveal');
+            }
+        });
+
+        // Professional Dust HUD
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        let pts = [];
+        class P { 
+            constructor() { this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.s=Math.random()*1.2; this.v=Math.random()*0.2; } 
+            upd(){ this.y-=this.v; if(this.y<0)this.y=canvas.height; }
+            drw(){ ctx.globalAlpha=0.2; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); }
+        }
+        for(let i=0;i<60;i++) pts.push(new P());
+        function render() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.upd();p.drw();}); requestAnimationFrame(render); } render();
+
+        // Safe Entry
+        window.onload = () => {
+            gsap.from(paper, { opacity: 0, y: 40, duration: 1.5, ease: "power4.out" });
+        };
+    </script>
+</body>
+</html>

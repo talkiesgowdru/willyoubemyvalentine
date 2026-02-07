@@ -1,0 +1,131 @@
+/* --- LUXURY TOKENS --- */
+:root {
+    --gold: #d4af37;
+    --gold-grad: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 70%, #fbf5b7 100%);
+    --dark: #070708;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body, html {
+    height: 100%; width: 100%;
+    background-color: var(--dark);
+    font-family: 'Inter', sans-serif;
+    color: white; overflow: hidden;
+}
+
+/* --- DYNAMIC FLUID BACKGROUND (Sharp & High Quality) --- */
+.fluid-background {
+    position: fixed; inset: 0; z-index: -1;
+    background: #0a0a0b; overflow: hidden;
+}
+
+.blob {
+    position: absolute; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+    filter: blur(80px); animation: move 20s infinite alternate;
+}
+
+.blob-1 { top: -10%; left: -10%; }
+.blob-2 { bottom: -10%; right: -10%; animation-delay: -5s; }
+.blob-3 { top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5; }
+
+@keyframes move {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(100px, 50px) scale(1.1); }
+}
+
+.glass-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(40px);
+}
+
+/* --- THE MASTER INTERFACE --- */
+.master-stage {
+    height: 100vh; display: flex;
+    justify-content: center; align-items: center;
+    padding: 20px;
+}
+
+.vault-card {
+    position: relative; width: 100%; max-width: 460px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 40px; padding: 60px 40px;
+    text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+}
+
+.shine-sweep {
+    position: absolute; top: -100%; left: -100%; width: 300%; height: 300%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+    transform: rotate(45deg); animation: sweep 12s infinite linear;
+}
+
+@keyframes sweep {
+    0% { transform: translate(-100%, -100%) rotate(45deg); }
+    100% { transform: translate(100%, 100%) rotate(45deg); }
+}
+
+/* --- IDENTITY: SHARPNESS CONTROL --- */
+.portrait-container {
+    position: relative; width: 110px; height: 110px;
+    margin: 0 auto 20px;
+}
+
+.main-avatar {
+    width: 100%; height: 100%; border-radius: 50%;
+    object-fit: cover; border: 2px solid var(--gold);
+    padding: 3px; background: var(--dark);
+    image-rendering: -webkit-optimize-contrast; /* MAXIMUM SHARPNESS */
+}
+
+.profile-glow {
+    position: absolute; inset: 0; background: var(--gold);
+    border-radius: 50%; filter: blur(25px); opacity: 0.2;
+}
+
+.status-badge {
+    font-size: 0.7rem; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 2.5px;
+    margin-top: 10px; font-weight: 800;
+}
+
+/* --- TYPOGRAPHY --- */
+.main-title {
+    font-family: 'Playfair Display', serif; font-size: 2.8rem;
+    line-height: 1.1; margin: 25px 0;
+}
+
+.gold-text-gradient {
+    background: var(--gold-grad); -webkit-background-clip: text;
+    background-clip: text; color: transparent;
+}
+
+.italic { font-style: italic; }
+.abstract-text { font-size: 0.95rem; color: rgba(255,255,255,0.6); margin-bottom: 40px; }
+
+/* --- BUTTONS --- */
+.auth-actions {
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+
+.btn-confirm {
+    background: var(--gold); color: var(--dark);
+    border: none; padding: 18px 45px; border-radius: 100px;
+    font-weight: 800; font-size: 1.05rem; cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+}
+
+.btn-decline {
+    background: transparent; color: rgba(255,255,255,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 30px; border-radius: 100px;
+    font-size: 0.85rem; cursor: pointer;
+}
