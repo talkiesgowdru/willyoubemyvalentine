@@ -28,7 +28,7 @@
         
         /* Navigation */
         .back-nav {
-            position: fixed; top: 30px; left: 30px; z-index: 1000;
+            position: fixed; top: 30px; left: 30px; z-index: 1001;
             text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
             font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
             background: rgba(28, 28, 30, 0.8); padding: 12px 24px; border-radius: 50px;
@@ -39,6 +39,7 @@
         .app-shell {
             height: 100svh; display: flex; align-items: center; justify-content: center;
             padding: 20px 20px var(--safe-bottom); box-sizing: border-box;
+            position: relative; z-index: 10;
         }
 
         /* Physical Paper Object */
@@ -95,32 +96,13 @@
 
     <canvas id="canvas"></canvas>
 
-    <a href="apps.html" class="back-nav"><i class="fas fa-arrow-left"></i> Hub</a>
+    <a href="../apps.html" class="back-nav"><i class="fas fa-arrow-left"></i> Hub</a>
 
     <div class="app-shell">
         <div class="paper-card" id="paper">
             <div class="date">February 01, 2026</div>
             <p class="letter-text">
-Le nayii 💗🫶 ,
-ನಾನು ನೀನು ನೀನು ನಾನು ಒಂದೇ ಇನ್ನು ಅನ್ನೋದನ್ನು ಒಪ್ಪಿಕೊಂತು ಈ ಹೃದಯ🫀,
-Nen andre onthara sakath ishta kane nan yeste baidru yeste kopa madkondru nane beku anthiya
 
-Nan yeste nin  math na kelskode idru mthe mthe helthiyaaa nang ad ishta 😂🫶💗
-
-Mthe lpr 
-ನೀ ಇಲ್ಲವಾದರೆ ನಾ ಹೇ....ಗೆ ಬಾಳಲೀ?.....
-
-Mthe ninge
-ನೆನಪಿದೆಯೆ ಮೊದಲ ನೋಟ?
-ನೆನಪಿದೆಯೆ ಮೊದಲ... ಸ್ಪರ್ಶ?.....
-ನೆನಪಿದೆಯೆ ಮತ್ತನು ತಂದ
-ಆ ಮೊದಲ ಚುಂಬನಾ? 
-Nang anthu tumbha chennag nenp ide 
- 
-Nin Pata Pata mathgalu  Nin kopa sittu 
-Nin kushi adyellad kintha nin Alu nan alsalla nan yest chennag nodkothini andre nene albeku devrantha ganda anthaaa athara 😂💗idun yella jeevana poorthi jothe ge iddu nodana ankondiniii
-
-Sooo Will You be My Valentine 💝 🫶
             </p>
             
             <div class="signature-wrap">
@@ -165,5 +147,4 @@ Sooo Will You be My Valentine 💝 🫶
         };
     </script>
 </body>
-
 </html>
