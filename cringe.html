@@ -27,7 +27,7 @@
         #canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; }
 
         .back-nav {
-            position: fixed; top: 30px; left: 30px; z-index: 1000;
+            position: fixed; top: 30px; left: 30px; z-index: 1001;
             text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
             font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
             background: var(--apple-glass); padding: 12px 24px; border-radius: 50px;
@@ -175,7 +175,6 @@
         // Surgical Kinetic Preview Logic
         window.addEventListener('load', () => {
             document.querySelectorAll('.media-card video').forEach(v => {
-                // Ensure muted state for autoplay compliance
                 v.muted = true;
                 v.parentElement.addEventListener('mouseenter', () => {
                     const playPromise = v.play();
@@ -201,6 +200,4 @@
         function render() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.upd();p.drw();}); requestAnimationFrame(render); } render();
     </script>
 </body>
-
 </html>
-
