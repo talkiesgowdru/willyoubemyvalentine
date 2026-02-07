@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Archive | Harshil R Gowda</title>
+    <title>Memories | Sanctuary OS</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -17,13 +17,13 @@
         }
 
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
+            margin: 0; padding: 0; width: 100%; height: 100svh;
             font-family: 'Inter', -apple-system, sans-serif;
             background: var(--bg); color: #fff;
             overflow: hidden; -webkit-font-smoothing: antialiased;
         }
 
-        /* Ambient HUD */
+        /* High-Fidelity HUD Atmos */
         #canvas { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
         .grain {
             position: fixed; inset: 0; z-index: 6; pointer-events: none;
@@ -35,89 +35,85 @@
         .orb-1 { width: 60vw; height: 60vw; background: var(--accent); top: -10%; left: -10%; }
         .orb-2 { width: 50vw; height: 50vw; background: #5856d6; bottom: -10%; right: -10%; }
 
-        /* Navigation */
-        .back-btn {
-            position: fixed; top: 40px; left: 40px; z-index: 100;
+        /* Hub Navigation Hook */
+        .back-nav {
+            position: fixed; top: 30px; left: 30px; z-index: 1000;
             text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
             font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px;
             background: var(--apple-blur); padding: 14px 28px; border-radius: 50px;
             backdrop-filter: blur(25px); border: 1px solid var(--border);
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .back-btn:hover { background: #fff; color: #000; transform: scale(1.05); }
+        .back-nav:hover { background: #fff; color: #000; transform: scale(1.05); }
 
-        /* Scroll Feed */
-        .scroll-container {
-            height: 100vh; overflow-y: scroll; padding: 160px 5vw 100px;
+        /* Scrolling Stage Architecture */
+        .scroll-stage {
+            height: 100svh; overflow-y: scroll; padding: 140px 6% 120px;
             scrollbar-width: none; position: relative; z-index: 10;
         }
-        .scroll-container::-webkit-scrollbar { display: none; }
+        .scroll-stage::-webkit-scrollbar { display: none; }
 
-        .header-box { text-align: center; margin-bottom: 120px; }
-        .header-box h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 10vw, 6rem); font-weight: 700; margin: 0; letter-spacing: -2px; }
+        .header-box { text-align: center; margin-bottom: 100px; }
+        .header-box h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 10vw, 5.5rem); font-weight: 700; margin: 0; letter-spacing: -2px; }
 
-        /* DYNAMIC MASONRY GRID - No predefined view area */
-        .grid-layout {
-            columns: 3; /* Standard Apple Masonry */
-            column-gap: 25px;
-            max-width: 1400px;
-            margin: 0 auto;
+        /* Surgical Masonry Logic */
+        .grid-engine {
+            columns: 3; column-gap: 25px;
+            max-width: 1400px; margin: 0 auto;
         }
+        @media (max-width: 1024px) { .grid-engine { columns: 2; } }
+        @media (max-width: 600px) { .grid-engine { columns: 1; } }
 
-        @media (max-width: 1024px) { .grid-layout { columns: 2; } }
-        @media (max-width: 768px) { .grid-layout { columns: 1; } }
-
-        .item { 
-            break-inside: avoid;
-            margin-bottom: 25px;
-            position: relative; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            border: 1px solid var(--border); 
-            background: #0a0a0a; 
-            overflow: hidden;
+        .item-card { 
+            break-inside: avoid; margin-bottom: 25px;
+            position: relative; border-radius: 24px; 
+            cursor: pointer; border: 1px solid var(--border); 
+            background: #0a0a0a; overflow: hidden;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        .item img { 
-            width: 100%; 
-            height: auto; /* Dynamic sizing based on image aspect ratio */
-            display: block;
+        .item-card img { 
+            width: 100%; height: auto; display: block;
             transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1); 
         }
-        .item:hover img { transform: scale(1.05); filter: saturate(1.2); }
+        .item-card:hover img { transform: scale(1.05); filter: saturate(1.1); }
 
-        /* Pro Slider Lightbox */
-        #lightbox {
+        /* Pro Focus Engine (Lightbox) */
+        #proViewer {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98);
-            backdrop-filter: blur(60px); z-index: 2000;
+            backdrop-filter: blur(60px); z-index: 5000;
             display: none; justify-content: center; align-items: center;
-            opacity: 0; transition: 0.5s ease;
+            opacity: 0;
         }
-        #lightbox img { 
-            max-width: 90%; 
-            max-height: 85vh; 
-            border-radius: 8px; 
-            object-fit: contain; /* Respects portrait or landscape perfectly */
-            pointer-events: none; 
+        #proViewer img { 
+            max-width: 92%; max-height: 80svh; border-radius: 12px; 
+            object-fit: contain; pointer-events: none; 
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
         }
         
-        .slider-nav {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        .viewer-nav {
+            position: absolute; inset: 0;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 30px; pointer-events: none;
+            padding: 0 40px; pointer-events: none;
         }
-        .nav-arrow {
+        .nav-trigger {
             pointer-events: auto; background: var(--apple-blur); border: 1px solid var(--border);
-            color: white; width: 55px; height: 55px; border-radius: 50%;
+            color: white; width: 60px; height: 60px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
-            font-size: 1rem; transition: 0.3s; z-index: 2100;
+            font-size: 1.2rem; transition: 0.3s;
         }
-        .nav-arrow:hover { background: white; color: black; }
+        .nav-trigger:hover { background: white; color: black; transform: scale(1.1); }
 
-        #closeBtn {
+        #closeViewer {
             position: absolute; top: 40px; right: 40px; pointer-events: auto;
-            color: white; font-size: 1.2rem; cursor: pointer; opacity: 0.5; z-index: 2100;
+            color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.6; z-index: 5100;
+            transition: 0.3s;
+        }
+        #closeViewer:hover { opacity: 1; transform: rotate(90deg); }
+
+        @media (max-width: 600px) {
+            .viewer-nav { padding: 0 15px; }
+            .nav-trigger { width: 50px; height: 50px; }
+            .scroll-stage { padding-top: 120px; }
         }
     </style>
 </head>
@@ -125,120 +121,137 @@
 
     <div class="grain"></div>
     <canvas id="canvas"></canvas>
-    
     <div class="ambient">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
     </div>
 
-    <a href="../apps.html" class="back-btn"><i class="fas fa-arrow-left"></i> HUB</a>
+    <a href="apps.html" class="back-nav"><i class="fas fa-chevron-left"></i> HUB</a>
 
-    <div class="scroll-container">
+    <div class="scroll-stage">
         <header class="header-box">
-            <p style="letter-spacing: 5px; text-transform: uppercase; font-size: 0.7rem; opacity: 0.5;">Sanctuary Archive</p>
+            <p style="letter-spacing: 6px; text-transform: uppercase; font-size: 0.7rem; opacity: 0.4; font-weight: 800;">Sanctuary Archive</p>
             <h1>The <span style="color:var(--accent); font-style: italic;">Memories</span></h1>
         </header>
 
-        <div class="grid-layout">
-            <div class="item" onclick="openSlider(0)"><img src="mem1.jpg"></div>
-            <div class="item" onclick="openSlider(1)"><img src="mem2.jpg"></div>
-            <div class="item" onclick="openSlider(2)"><img src="mem3.jpg"></div>
-            <div class="item" onclick="openSlider(3)"><img src="mem4.jpg"></div>
-            <div class="item" onclick="openSlider(4)"><img src="mem5.jpg"></div>
-            <div class="item" onclick="openSlider(5)"><img src="mem6.jpg"></div>
-            <div class="item" onclick="openSlider(6)"><img src="mem7.jpg"></div>
-            <div class="item" onclick="openSlider(7)"><img src="mem8.jpg"></div>
-            <div class="item" onclick="openSlider(8)"><img src="mem9.jpg"></div>
-            <div class="item" onclick="openSlider(9)"><img src="mem10.jpg"></div>
-            <div class="item" onclick="openSlider(10)"><img src="mem11.jpg"></div>
-            <div class="item" onclick="openSlider(11)"><img src="mem12.jpg"></div>
+        <div class="grid-engine">
+            <div class="item-card" onclick="launchViewer(0)"><img src="mem1.jpg"></div>
+            <div class="item-card" onclick="launchViewer(1)"><img src="mem2.jpg"></div>
+            <div class="item-card" onclick="launchViewer(2)"><img src="mem3.jpg"></div>
+            <div class="item-card" onclick="launchViewer(3)"><img src="mem4.jpg"></div>
+            <div class="item-card" onclick="launchViewer(4)"><img src="mem5.jpg"></div>
+            <div class="item-card" onclick="launchViewer(5)"><img src="mem6.jpg"></div>
+            <div class="item-card" onclick="launchViewer(6)"><img src="mem7.jpg"></div>
+            <div class="item-card" onclick="launchViewer(7)"><img src="mem8.jpg"></div>
+            <div class="item-card" onclick="launchViewer(8)"><img src="mem9.jpg"></div>
+            <div class="item-card" onclick="launchViewer(9)"><img src="mem10.jpg"></div>
+            <div class="item-card" onclick="launchViewer(10)"><img src="mem11.jpg"></div>
+            <div class="item-card" onclick="launchViewer(11)"><img src="mem12.jpg"></div>
         </div>
     </div>
 
-    <div id="lightbox">
-        <div id="closeBtn" onclick="closeSlider()"><i class="fas fa-times"></i></div>
-        <div class="slider-nav">
-            <div class="nav-arrow" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></div>
-            <div class="nav-arrow" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></div>
+    <div id="proViewer">
+        <div id="closeViewer" onclick="killViewer()"><i class="fas fa-times"></i></div>
+        <div class="viewer-nav">
+            <div class="nav-trigger" onclick="shiftSlide(-1)"><i class="fas fa-chevron-left"></i></div>
+            <div class="nav-trigger" onclick="shiftSlide(1)"><i class="fas fa-chevron-right"></i></div>
         </div>
-        <img id="sliderImg" src="">
+        <img id="activeImg" src="">
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        const lb = document.getElementById('lightbox');
-        const sliderImg = document.getElementById('sliderImg');
+        const viewer = document.getElementById('proViewer');
+        const activeImg = document.getElementById('activeImg');
         let particles = [];
-        let currentIndex = 0;
-        const images = ["mem1.jpg","mem2.jpg","mem3.jpg","mem4.jpg","mem5.jpg","mem6.jpg","mem7.jpg","mem8.jpg","mem9.jpg","mem10.jpg","mem11.jpg","mem12.jpg"];
+        let curIdx = 0;
+        const assets = ["mem1.jpg","mem2.jpg","mem3.jpg","mem4.jpg","mem5.jpg","mem6.jpg","mem7.jpg","mem8.jpg","mem9.jpg","mem10.jpg","mem11.jpg","mem12.jpg"];
 
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize);
         resize();
 
         class Particle {
-            constructor(x, y) { this.x = x; this.y = y; this.size = Math.random() * 1.5; this.vX = (Math.random() - 0.5) * 2; this.vY = (Math.random() - 0.5) * 2; this.life = 1; }
+            constructor(x, y) { 
+                this.x = x; this.y = y; 
+                this.size = Math.random() * 1.5 + 0.5; 
+                this.vX = (Math.random() - 0.5) * 1.5; 
+                this.vY = (Math.random() - 0.5) * 1.5; 
+                this.life = 1; 
+            }
             update() { this.x += this.vX; this.y += this.vY; this.life -= 0.015; }
-            draw() { ctx.globalAlpha = this.life; ctx.fillStyle = '#ff3b30'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill(); }
+            draw() { 
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(255, 59, 48, ${this.life * 0.5})`;
+                ctx.fill(); 
+            }
         }
 
-        function loop() { ctx.clearRect(0,0,canvas.width, canvas.height); particles = particles.filter(p => p.life > 0); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(loop); }
+        function loop() { 
+            ctx.clearRect(0,0,canvas.width, canvas.height); 
+            particles = particles.filter(p => p.life > 0); 
+            particles.forEach(p => { p.update(); p.draw(); }); 
+            requestAnimationFrame(loop); 
+        }
         loop();
 
         window.addEventListener('mousemove', (e) => {
             if(Math.random() > 0.8) particles.push(new Particle(e.clientX, e.clientY));
         });
 
-        function openSlider(index) {
-            currentIndex = index;
-            updateSlider(true);
-            lb.style.display = 'flex';
-            gsap.to(lb, { opacity: 1, duration: 0.5 });
+        // Focus Engine Logic
+        function launchViewer(idx) {
+            curIdx = idx;
+            syncSlide(true);
+            viewer.style.display = 'flex';
+            gsap.to(viewer, { opacity: 1, duration: 0.5, ease: "power2.out" });
         }
 
-        function closeSlider() {
-            gsap.to(lb, { duration: 0.4, opacity: 0, onComplete: () => lb.style.display = 'none' });
+        function killViewer() {
+            gsap.to(viewer, { opacity: 0, duration: 0.4, onComplete: () => viewer.style.display = 'none' });
         }
 
-        function updateSlider(isFirst = false) {
-            if(!isFirst) {
-                gsap.to(sliderImg, { opacity: 0, scale: 0.95, filter: "blur(10px)", duration: 0.3, onComplete: () => {
-                    sliderImg.src = images[currentIndex];
-                    gsap.to(sliderImg, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.4, ease: "power2.out" });
+        function syncSlide(isLaunch = false) {
+            if(!isLaunch) {
+                gsap.to(activeImg, { opacity: 0, x: -20, filter: "blur(10px)", duration: 0.3, onComplete: () => {
+                    activeImg.src = assets[curIdx];
+                    gsap.fromTo(activeImg, { opacity: 0, x: 20, filter: "blur(10px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.4, ease: "power2.out" });
                 }});
             } else {
-                sliderImg.src = images[currentIndex];
-                gsap.fromTo(sliderImg, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6 });
+                activeImg.src = assets[curIdx];
+                gsap.fromTo(activeImg, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" });
             }
         }
 
-        function changeSlide(dir) {
-            currentIndex = (currentIndex + dir + images.length) % images.length;
-            updateSlider();
+        function shiftSlide(dir) {
+            curIdx = (curIdx + dir + assets.length) % assets.length;
+            syncSlide();
         }
 
-        // SWIPE & KEYBOARD
+        // Hardware Controls
         window.addEventListener('keydown', (e) => {
-            if (lb.style.display === 'flex') {
-                if (e.key === 'ArrowRight') changeSlide(1);
-                if (e.key === 'ArrowLeft') changeSlide(-1);
-                if (e.key === 'Escape') closeSlider();
+            if (viewer.style.display === 'flex') {
+                if (e.key === 'ArrowRight') shiftSlide(1);
+                if (e.key === 'ArrowLeft') shiftSlide(-1);
+                if (e.key === 'Escape') killViewer();
             }
         });
 
-        let tsX = 0;
-        window.addEventListener('touchstart', e => { tsX = e.changedTouches[0].screenX; });
+        // Haptic Swipe Logic
+        let touchX = 0;
+        window.addEventListener('touchstart', e => { touchX = e.changedTouches[0].screenX; });
         window.addEventListener('touchend', e => {
-            let teX = e.changedTouches[0].screenX;
-            if (lb.style.display === 'flex') {
-                if (teX < tsX - 60) changeSlide(1);
-                if (teX > tsX + 60) changeSlide(-1);
+            if (viewer.style.display === 'flex') {
+                let endX = e.changedTouches[0].screenX;
+                if (endX < touchX - 60) shiftSlide(1);
+                if (endX > touchX + 60) shiftSlide(-1);
             }
         });
 
-        gsap.from(".item", { duration: 1.2, y: 50, opacity: 0, stagger: 0.08, ease: "power3.out" });
+        // Entrance Sequence
+        gsap.from(".item-card", { duration: 1.2, y: 60, opacity: 0, stagger: 0.08, ease: "expo.out" });
     </script>
 </body>
 </html>
