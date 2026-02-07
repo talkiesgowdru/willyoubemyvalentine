@@ -23,7 +23,6 @@
             overflow: hidden; -webkit-font-smoothing: antialiased;
         }
 
-        /* Ambient Atmos HUD */
         #canvas { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
         .grain {
             position: fixed; inset: 0; z-index: 6; pointer-events: none;
@@ -35,18 +34,18 @@
         .orb-1 { width: 60vw; height: 60vw; background: var(--accent); top: -10%; left: -10%; }
         .orb-2 { width: 50vw; height: 50vw; background: #5856d6; bottom: -10%; right: -10%; }
 
-        /* Navigation */
+        /* FIXED NAVIGATION */
         .back-nav {
-            position: fixed; top: 40px; left: 40px; z-index: 1000;
+            position: fixed; top: 40px; left: 40px; z-index: 9999;
             text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
             font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px;
             background: var(--apple-blur); padding: 14px 28px; border-radius: 50px;
             backdrop-filter: blur(25px); border: 1px solid var(--border);
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: auto;
         }
         .back-nav:hover { background: #fff; color: #000; transform: scale(1.05); }
 
-        /* Scroll Engine */
         .scroll-stage {
             height: 100vh; overflow-y: scroll; padding: 160px 5vw 100px;
             scrollbar-width: none; position: relative; z-index: 10;
@@ -56,7 +55,6 @@
         .header-section { text-align: center; margin-bottom: 100px; }
         .header-section h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 10vw, 6rem); font-weight: 700; margin: 0; letter-spacing: -2px; }
 
-        /* FLUID ADAPTIVE MASONRY */
         .grid-container {
             columns: 2; column-gap: 30px;
             max-width: 1300px; margin: 0 auto;
@@ -72,6 +70,7 @@
         }
         .video-object:hover { transform: translateY(-8px); z-index: 20; }
 
+        /* LOADING OPTIMIZATION: Ensure videos don't stall the page */
         video { width: 100%; height: auto; display: block; opacity: 0.6; transition: 0.6s ease; background: #000; }
         .video-object:hover video { opacity: 1; filter: saturate(1.1); }
 
@@ -85,17 +84,15 @@
         .metadata h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.8rem; margin: 0; }
         .metadata .label-tag { font-size: 0.65rem; font-weight: 900; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
 
-        /* Pro Slider Interface */
         #proPlayer {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98);
             backdrop-filter: blur(60px); z-index: 5000;
             display: none; justify-content: center; align-items: center;
             opacity: 0; transition: opacity 0.5s ease;
-            touch-action: none; /* Critical for swiping */
+            touch-action: none;
         }
         #proPlayer video { max-width: 90%; max-height: 85vh; border-radius: 12px; object-fit: contain; z-index: 5001; }
         
-        /* Interaction Shield to capture swipes over the video */
         .touch-shield { position: absolute; inset: 0; z-index: 5002; }
 
         .slider-nav {
@@ -129,7 +126,7 @@
         <div class="orb orb-2" id="orb2"></div>
     </div>
 
-    <a href="../apps.html" class="back-nav"><i class="fas fa-arrow-left"></i> Hub</a>
+    <a href="apps.html" class="back-nav"><i class="fas fa-arrow-left"></i> Hub</a>
 
     <div class="scroll-stage">
         <header class="header-section">
@@ -138,14 +135,14 @@
         </header>
 
         <div class="grid-container">
-            <div class="video-object" onclick="openPlayer(0)"><video muted playsinline preload="auto"><source src="vid1.mp4"></video><div class="metadata"><div class="label-tag">01</div><h3>My Baby</h3></div></div>
-            <div class="video-object" onclick="openPlayer(1)"><video muted playsinline preload="auto"><source src="vid2.mp4"></video><div class="metadata"><div class="label-tag">02</div><h3>My Love</h3></div></div>
-            <div class="video-object" onclick="openPlayer(2)"><video muted playsinline preload="auto"><source src="vid3.mp4"></video><div class="metadata"><div class="label-tag">03</div><h3>My World</h3></div></div>
-            <div class="video-object" onclick="openPlayer(3)"><video muted playsinline preload="auto"><source src="vid4.mp4"></video><div class="metadata"><div class="label-tag">04</div><h3>Forever</h3></div></div>
-            <div class="video-object" onclick="openPlayer(4)"><video muted playsinline preload="auto"><source src="vid5.mp4"></video><div class="metadata"><div class="label-tag">05</div><h3>Pure Joy</h3></div></div>
-            <div class="video-object" onclick="openPlayer(5)"><video muted playsinline preload="auto"><source src="vid6.mp4"></video><div class="metadata"><div class="label-tag">06</div><h3>Infinite</h3></div></div>
-            <div class="video-object" onclick="openPlayer(6)"><video muted playsinline preload="auto"><source src="vid7.mp4"></video><div class="metadata"><div class="label-tag">07</div><h3>Mine</h3></div></div>
-            <div class="video-object" onclick="openPlayer(7)"><video muted playsinline preload="auto"><source src="vid8.mp4"></video><div class="metadata"><div class="label-tag">08</div><h3>Everything</h3></div></div>
+            <div class="video-object" onclick="openPlayer(0)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/vid6_cdtux7.mp4"></video><div class="metadata"><div class="label-tag">01</div><h3>My Baby</h3></div></div>
+            <div class="video-object" onclick="openPlayer(1)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/vid4_nzhsps.mp4"></video><div class="metadata"><div class="label-tag">02</div><h3>My Love</h3></div></div>
+            <div class="video-object" onclick="openPlayer(2)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/vid7_bszxgq.mp4"></video><div class="metadata"><div class="label-tag">03</div><h3>My World</h3></div></div>
+            <div class="video-object" onclick="openPlayer(3)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/vid5_eksqop.mp4"></video><div class="metadata"><div class="label-tag">04</div><h3>Forever</h3></div></div>
+            <div class="video-object" onclick="openPlayer(4)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/vid8_byf8xe.mp4"></video><div class="metadata"><div class="label-tag">05</div><h3>Pure Joy</h3></div></div>
+            <div class="video-object" onclick="openPlayer(5)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/video_2026-02-07_17-03-26_uasqcx.mp4"></video><div class="metadata"><div class="label-tag">06</div><h3>Infinite</h3></div></div>
+            <div class="video-object" onclick="openPlayer(6)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770464226/video_2026-02-07_17-06-16_j8iwqp.mp4"></video><div class="metadata"><div class="label-tag">07</div><h3>Mine</h3></div></div>
+            <div class="video-object" onclick="openPlayer(7)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770464251/video_2026-02-07_17-06-10_lfslxv.mp4"></video><div class="metadata"><div class="label-tag">08</div><h3>Everything</h3></div></div>
         </div>
     </div>
 
@@ -155,7 +152,7 @@
             <div class="nav-arrow" id="prevArrow"><i class="fas fa-chevron-left"></i></div>
             <div class="nav-arrow" id="nextArrow"><i class="fas fa-chevron-right"></i></div>
         </div>
-        <video id="masterStream" playsinline></video>
+        <video id="masterStream" playsinline controls preload="auto"></video>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -164,7 +161,18 @@
         const ctx = canvas.getContext('2d');
         const player = document.getElementById('proPlayer');
         const stream = document.getElementById('masterStream');
-        const vids = ["vid1.mp4", "vid2.mp4", "vid3.mp4", "vid4.mp4", "vid5.mp4", "vid6.mp4", "vid7.mp4", "vid8.mp4"];
+        
+        const vids = [
+            "https://res.cloudinary.com/ddmom8wg7/video/upload/vid6_cdtux7.mp4",
+            "https://res.cloudinary.com/ddmom8wg7/video/upload/vid4_nzhsps.mp4",
+            "https://res.cloudinary.com/ddmom8wg7/video/upload/vid7_bszxgq.mp4",
+            "https://res.cloudinary.com/ddmom8wg7/video/upload/vid5_eksqop.mp4",
+            "https://res.cloudinary.com/ddmom8wg7/video/upload/vid8_byf8xe.mp4",
+            "https://res.cloudinary.com/ddmom8wg7/video/upload/video_2026-02-07_17-03-26_uasqcx.mp4",
+            "https://res.cloudinary.com/ddmom8wg7/video/upload/v1770464226/video_2026-02-07_17-06-16_j8iwqp.mp4",
+            "https://res.cloudinary.com/ddmom8wg7/video/upload/v1770464251/video_2026-02-07_17-06-10_lfslxv.mp4"
+        ];
+
         let particles = [];
         let currentIndex = 0;
 
@@ -187,12 +195,11 @@
             gsap.to("#orb2", { x: (e.clientX - window.innerWidth/2) * -0.05, duration: 1 });
         });
 
-        // THUMBNAIL ENGINE
-        document.querySelectorAll('video').forEach(v => {
-            v.addEventListener('loadedmetadata', () => { v.currentTime = 3; });
+        // OPTIMIZED GRID PLAYBACK
+        document.querySelectorAll('.video-object video').forEach(v => {
             const obj = v.closest('.video-object');
-            obj.addEventListener('mouseenter', () => { v.currentTime = 0; v.play(); });
-            obj.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 3; });
+            obj.addEventListener('mouseenter', () => { v.play(); });
+            obj.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
         });
 
         function openPlayer(index) {
@@ -222,7 +229,6 @@
             }});
         }
 
-        // ARROW KEYS & CLICKS
         document.getElementById('prevArrow').onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
         document.getElementById('nextArrow').onclick = (e) => { e.stopPropagation(); changeSlide(1); };
 
@@ -234,13 +240,12 @@
             }
         });
 
-        // FIXED SWIPE LOGIC
         let tsX = 0;
         player.addEventListener('touchstart', e => { tsX = e.changedTouches[0].screenX; }, {passive: true});
         player.addEventListener('touchend', e => {
             let teX = e.changedTouches[0].screenX;
-            if (teX < tsX - 50) changeSlide(1); // Swipe Left -> Next
-            if (teX > tsX + 50) changeSlide(-1); // Swipe Right -> Prev
+            if (teX < tsX - 50) changeSlide(1); 
+            if (teX > tsX + 50) changeSlide(-1); 
         }, {passive: true});
 
         gsap.from(".video-object", { duration: 1.2, y: 50, opacity: 0, stagger: 0.12, ease: "power4.out" });
