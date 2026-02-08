@@ -15,8 +15,8 @@
             --accent: #1DB954;
             --border: rgba(255, 255, 255, 0.1);
             --dock-height: 100px;
-            /* Enhanced Safe Zone for Mobile Navigation Bars */
-            --safe-bottom: max(30px, env(safe-area-inset-bottom));
+            /* FORCE a larger safe zone to clear the Android system navigation bar */
+            --safe-bottom: max(60px, env(safe-area-inset-bottom)); 
         }
 
         body, html {
@@ -27,7 +27,7 @@
         }
 
         #bg-canvas { position: fixed; inset: 0; z-index: 0; opacity: 0.3; pointer-events: none; }
-        .dynamic-bg { position: fixed; inset: 0; z-index: 1; transition: 1.5s; filter: brightness(0.3) blur(100px); }
+        .dynamic-bg { position: fixed; inset: 0; z-index: 1; transition: 1.5s ease-in-out; filter: brightness(0.3) blur(100px); }
 
         .back-nav {
             position: fixed; top: 30px; left: 30px; z-index: 9999;
@@ -72,7 +72,6 @@
         .track-card h3 { font-size: 1rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 800; }
         .track-card p { font-size: 0.85rem; color: #b3b3b3; }
 
-        /* FIXED DOCK WITH EXTRA SAFE ZONE */
         .docked-bar {
             height: calc(var(--dock-height) + var(--safe-bottom)); 
             background: #121212; border-top: 1px solid var(--border);
@@ -97,7 +96,6 @@
 
         .side-spacer { width: 30%; display: flex; justify-content: flex-end; }
 
-        /* FULL VAULT OVERLAY */
         .full-vault {
             position: fixed; inset: 0; background: #000; z-index: 9000;
             display: none; flex-direction: column;
@@ -133,7 +131,7 @@
 
         .active-glow { color: var(--accent) !important; text-shadow: 0 0 15px var(--accent); }
 
-        /* MOBILE FIXES */
+        /* MOBILE OPTIMIZATION */
         @media (max-width: 850px) {
             .dock-text { display: none; }
             .playlist-header { flex-direction: column; align-items: center; text-align: center; padding-top: 100px; }
@@ -141,10 +139,11 @@
             
             .docked-bar { 
                 padding: 10px 15px var(--safe-bottom); 
-                height: calc(110px + var(--safe-bottom)); /* Increased mobile dock height */
+                /* Increase height to push elements further up from the Android buttons */
+                height: calc(130px + var(--safe-bottom)); 
             }
             .dock-info { width: auto; }
-            .dock-controls { gap: 15px; padding-bottom: 10px; } /* Pushes controls up */
+            .dock-controls { gap: 12px; padding-bottom: 30px; } /* Lift controls significantly */
             .progress-engine { max-width: 100% !important; }
             
             .grid-wrapper { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 5% 40px; }
@@ -304,7 +303,14 @@
         isS = !isS; 
         document.getElementById('m-shuf').classList.toggle('active-glow', isS); 
         document.getElementById('f-shuf').classList.toggle('active-glow', isS);
-        if(isS) { for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; } } else { queue = [...trackData]; }
+        if(isS) { 
+            for (let i = queue.length - 1; i > 0; i--) { 
+                const j = Math.floor(Math.random() * (i + 1)); 
+                [queue[i], queue[j]] = [queue[j], queue[i]]; 
+            } 
+        } else { 
+            queue = [...trackData]; 
+        }
     }
 
     function handleRepeat() { 
