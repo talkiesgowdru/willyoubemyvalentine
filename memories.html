@@ -23,7 +23,6 @@
             overflow: hidden; -webkit-font-smoothing: antialiased;
         }
 
-        /* High-Fidelity HUD Atmos */
         #canvas { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
         .grain {
             position: fixed; inset: 0; z-index: 6; pointer-events: none;
@@ -35,7 +34,6 @@
         .orb-1 { width: 60vw; height: 60vw; background: var(--accent); top: -10%; left: -10%; }
         .orb-2 { width: 50vw; height: 50vw; background: #5856d6; bottom: -10%; right: -10%; }
 
-        /* Hub Navigation Hook */
         .back-nav {
             position: fixed; top: 30px; left: 30px; z-index: 1000;
             text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
@@ -46,17 +44,16 @@
         }
         .back-nav:hover { background: #fff; color: #000; transform: scale(1.05); }
 
-        /* Scrolling Stage Architecture */
         .scroll-stage {
-            height: 100svh; overflow-y: scroll; padding: 140px 6% 120px;
+            height: 100svh; overflow-y: scroll; padding: 140px 6% 0; /* Changed bottom padding to 0 */
             scrollbar-width: none; position: relative; z-index: 10;
+            box-sizing: border-box;
         }
         .scroll-stage::-webkit-scrollbar { display: none; }
 
         .header-box { text-align: center; margin-bottom: 100px; }
         .header-box h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 10vw, 5.5rem); font-weight: 700; margin: 0; letter-spacing: -2px; }
 
-        /* Surgical Masonry Logic */
         .grid-engine {
             columns: 3; column-gap: 25px;
             max-width: 1400px; margin: 0 auto;
@@ -77,7 +74,13 @@
         }
         .item-card:hover img { transform: scale(1.05); filter: saturate(1.1); }
 
-        /* Pro Focus Engine (Lightbox) */
+        /* Premium Bottom Spacer */
+        .bottom-spacer { 
+            height: 200px; /* Force extra scroll space for mobile comfort */
+            width: 100%;
+            clear: both;
+        }
+
         #proViewer {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98);
             backdrop-filter: blur(60px); z-index: 5000;
@@ -114,6 +117,7 @@
             .viewer-nav { padding: 0 15px; }
             .nav-trigger { width: 50px; height: 50px; }
             .scroll-stage { padding-top: 120px; }
+            .bottom-spacer { height: 160px; } /* Mobile optimization for safe area */
         }
     </style>
 </head>
@@ -148,6 +152,8 @@
             <div class="item-card" onclick="launchViewer(10)"><img src="mem11.jpg"></div>
             <div class="item-card" onclick="launchViewer(11)"><img src="mem12.jpg"></div>
         </div>
+
+        <div class="bottom-spacer"></div>
     </div>
 
     <div id="proViewer">
@@ -201,7 +207,6 @@
             if(Math.random() > 0.8) particles.push(new Particle(e.clientX, e.clientY));
         });
 
-        // Focus Engine Logic
         function launchViewer(idx) {
             curIdx = idx;
             syncSlide(true);
@@ -230,7 +235,6 @@
             syncSlide();
         }
 
-        // Hardware Controls
         window.addEventListener('keydown', (e) => {
             if (viewer.style.display === 'flex') {
                 if (e.key === 'ArrowRight') shiftSlide(1);
@@ -239,7 +243,6 @@
             }
         });
 
-        // Haptic Swipe Logic
         let touchX = 0;
         window.addEventListener('touchstart', e => { touchX = e.changedTouches[0].screenX; });
         window.addEventListener('touchend', e => {
@@ -250,7 +253,6 @@
             }
         });
 
-        // Entrance Sequence
         gsap.from(".item-card", { duration: 1.2, y: 60, opacity: 0, stagger: 0.08, ease: "expo.out" });
     </script>
 </body>
