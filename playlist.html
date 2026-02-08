@@ -15,7 +15,8 @@
             --accent: #1DB954;
             --border: rgba(255, 255, 255, 0.1);
             --dock-height: 100px;
-            --safe-bottom: env(safe-area-inset-bottom);
+            /* Enhanced Safe Zone for Mobile Navigation Bars */
+            --safe-bottom: max(30px, env(safe-area-inset-bottom));
         }
 
         body, html {
@@ -71,12 +72,13 @@
         .track-card h3 { font-size: 1rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 800; }
         .track-card p { font-size: 0.85rem; color: #b3b3b3; }
 
-        /* RESTORED EXACT DOCK & SAFE ZONES */
+        /* FIXED DOCK WITH EXTRA SAFE ZONE */
         .docked-bar {
             height: calc(var(--dock-height) + var(--safe-bottom)); 
             background: #121212; border-top: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 30px var(--safe-bottom); position: relative; z-index: 1000;
+            box-sizing: border-box;
         }
 
         .dock-info { display: flex; align-items: center; gap: 15px; width: 30%; cursor: pointer; }
@@ -95,7 +97,7 @@
 
         .side-spacer { width: 30%; display: flex; justify-content: flex-end; }
 
-        /* FULL VAULT OVERLAY - RESTORED ORIGINAL FLEX LOGIC */
+        /* FULL VAULT OVERLAY */
         .full-vault {
             position: fixed; inset: 0; background: #000; z-index: 9000;
             display: none; flex-direction: column;
@@ -131,22 +133,22 @@
 
         .active-glow { color: var(--accent) !important; text-shadow: 0 0 15px var(--accent); }
 
-        /* MOBILE FIXES - MAINTAINING DOCK VISIBILITY ABOVE TASKBARS */
+        /* MOBILE FIXES */
         @media (max-width: 850px) {
             .dock-text { display: none; }
             .playlist-header { flex-direction: column; align-items: center; text-align: center; padding-top: 100px; }
             .header-art { width: 220px; }
             
-            .docked-bar { padding: 0 15px var(--safe-bottom); }
+            .docked-bar { 
+                padding: 10px 15px var(--safe-bottom); 
+                height: calc(110px + var(--safe-bottom)); /* Increased mobile dock height */
+            }
             .dock-info { width: auto; }
-            .dock-controls { gap: 12px; }
+            .dock-controls { gap: 15px; padding-bottom: 10px; } /* Pushes controls up */
             .progress-engine { max-width: 100% !important; }
             
             .grid-wrapper { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 5% 40px; }
             .track-card { padding: 12px; }
-            
-            /* Add extra padding to ensure progress bar is not hidden by browser navigation */
-            .dock-controls { padding-bottom: 10px; }
         }
 
         @media (max-width: 500px) {
