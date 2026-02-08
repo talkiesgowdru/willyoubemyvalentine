@@ -71,6 +71,7 @@
         .track-card h3 { font-size: 1rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 800; }
         .track-card p { font-size: 0.85rem; color: #b3b3b3; }
 
+        /* RESTORED EXACT DOCK & SAFE ZONES */
         .docked-bar {
             height: calc(var(--dock-height) + var(--safe-bottom)); 
             background: #121212; border-top: 1px solid var(--border);
@@ -92,7 +93,9 @@
         .rail { flex: 1; height: 4px; background: #333; border-radius: 10px; cursor: pointer; position: relative; }
         .fill { height: 100%; width: 0%; background: #fff; border-radius: 10px; pointer-events: none; }
 
-        /* FULL VAULT OVERLAY */
+        .side-spacer { width: 30%; display: flex; justify-content: flex-end; }
+
+        /* FULL VAULT OVERLAY - RESTORED ORIGINAL FLEX LOGIC */
         .full-vault {
             position: fixed; inset: 0; background: #000; z-index: 9000;
             display: none; flex-direction: column;
@@ -128,7 +131,7 @@
 
         .active-glow { color: var(--accent) !important; text-shadow: 0 0 15px var(--accent); }
 
-        /* MOBILE OPTIMIZATION */
+        /* MOBILE FIXES - MAINTAINING DOCK VISIBILITY ABOVE TASKBARS */
         @media (max-width: 850px) {
             .dock-text { display: none; }
             .playlist-header { flex-direction: column; align-items: center; text-align: center; padding-top: 100px; }
@@ -141,6 +144,9 @@
             
             .grid-wrapper { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 5% 40px; }
             .track-card { padding: 12px; }
+            
+            /* Add extra padding to ensure progress bar is not hidden by browser navigation */
+            .dock-controls { padding-bottom: 10px; }
         }
 
         @media (max-width: 500px) {
@@ -168,7 +174,7 @@
             <img src="your_profile.jpg" class="header-art" id="playlist-art">
             <div class="header-text">
                 <h1>OUR PLAYLIST</h1>
-                <p style="color:var(--accent); font-weight:800; font-size:12px; margin-top:12px; text-transform:uppercase; letter-spacing:2px;">Sanctuary OS Native Player</p>
+                <p style="color:var(--accent); font-weight:800; font-size:12px; margin-top:12px; text-transform:uppercase; letter-spacing:2px;">ಅದೇ ರಾಗ ಅದೇ ಹಾಡು</p>
             </div>
         </header>
         <div class="grid-wrapper" id="grid"></div>
@@ -179,7 +185,7 @@
             <img src="your_profile.jpg" id="m-img">
             <div class="dock-text">
                 <h4 id="m-title">Select Track</h4>
-                <p id="m-artist">Sanctuary OS</p>
+                <p id="m-artist">ಅದೇ ರಾಗ ಅದೇ ಹಾಡು</p>
             </div>
         </div>
         <div class="dock-controls">
@@ -201,9 +207,7 @@
 </div>
 
 <div class="full-vault" id="vault">
-    <div class="vault-close" onclick="toggleVault(false)">
-        <i class="fas fa-chevron-down"></i>
-    </div>
+    <div class="vault-close" onclick="toggleVault(false)"><i class="fas fa-chevron-down"></i></div>
     
     <div class="unified-rigid-box">
         <div class="vault-art-box"><img src="" id="f-img"></div>
@@ -268,7 +272,7 @@
     function play(idx) {
         if(idx < 0 || idx >= queue.length) return;
         curIdx = idx; const t = queue[curIdx]; audio.src = t.url; audio.play();
-        document.getElementById('m-img').src = document.getElementById('f-img').src = document.getElementById('playlist-art').src = t.img;
+        document.getElementById('m-img').src = document.getElementById('f-img').src = t.img;
         document.getElementById('m-title').innerText = document.getElementById('f-title').innerText = t.title;
         document.getElementById('m-artist').innerText = document.getElementById('f-artist').innerText = t.artist;
         document.getElementById('bgLayer').style.background = `radial-gradient(circle at center, ${t.accent} 0%, #000 100%)`;
@@ -298,14 +302,7 @@
         isS = !isS; 
         document.getElementById('m-shuf').classList.toggle('active-glow', isS); 
         document.getElementById('f-shuf').classList.toggle('active-glow', isS);
-        if(isS) { 
-            for (let i = queue.length - 1; i > 0; i--) { 
-                const j = Math.floor(Math.random() * (i + 1)); 
-                [queue[i], queue[j]] = [queue[j], queue[i]]; 
-            } 
-        } else { 
-            queue = [...trackData]; 
-        }
+        if(isS) { for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; } } else { queue = [...trackData]; }
     }
 
     function handleRepeat() { 
@@ -316,12 +313,8 @@
 
     function toggleVault(show) { 
         const v = document.getElementById('vault');
-        if(show) { 
-            v.style.display = 'flex'; 
-            gsap.fromTo(v, {y: '100%'}, {y: '0%', duration: 0.6, ease: "expo.out"}); 
-        } else { 
-            gsap.to(v, {y: '100%', duration: 0.5, ease: "power2.inOut", onComplete: () => v.style.display = 'none'}); 
-        }
+        if(show) { v.style.display = 'flex'; gsap.fromTo(v, {y: '100%'}, {y: '0%', duration: 0.6, ease: "expo.out"}); } 
+        else { gsap.to(v, {y: '100%', duration: 0.5, ease: "power2.inOut", onComplete: () => v.style.display = 'none'}); }
     }
 
     audio.onended = () => { if(isR) { audio.currentTime = 0; audio.play(); } else { next(); } };
@@ -330,41 +323,19 @@
         const p = (audio.currentTime / audio.duration) * 100; 
         const time = fmt(audio.currentTime);
         const total = audio.duration ? fmt(audio.duration) : "0:00";
-
-        document.getElementById('fill-m').style.width = p + '%';
-        document.getElementById('cur-m').innerText = time;
-        document.getElementById('dur-m').innerText = total;
-
-        document.getElementById('fill-f').style.width = p + '%';
-        document.getElementById('cur-f').innerText = time;
-        document.getElementById('dur-f').innerText = total;
+        document.getElementById('fill-m').style.width = document.getElementById('fill-f').style.width = p + '%';
+        document.getElementById('cur-m').innerText = document.getElementById('cur-f').innerText = time;
+        document.getElementById('dur-m').innerText = document.getElementById('dur-f').innerText = total;
     };
 
     function seek(e) { 
         const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        audio.currentTime = (x / rect.width) * audio.duration; 
+        audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration; 
     }
 
     function fmt(s) { if(isNaN(s)) return "0:00"; const m = Math.floor(s/60); const sc = Math.floor(s%60); return `${m}:${sc < 10 ? '0' : ''}${sc}`; }
-
-    const cvs = document.getElementById('bg-canvas');
-    const ctx = cvs.getContext('2d');
-    function resize() { cvs.width = window.innerWidth; cvs.height = window.innerHeight; }
-    window.addEventListener('resize', resize); resize();
-    let pts = [];
-    class P { 
-        constructor() { this.init(); }
-        init() { this.x=Math.random()*cvs.width; this.y=Math.random()*cvs.height; this.s=Math.random()*1.2; this.v=Math.random()*0.2; }
-        upd(){ this.y-=this.v; if(this.y<0) this.init(); } 
-        drw(){ ctx.globalAlpha=0.15; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); } 
-    }
-    for(let i=0; i<60; i++) pts.push(new P());
-    function anim() { ctx.clearRect(0,0,cvs.width,cvs.height); pts.forEach(p=>{p.upd();p.drw();}); requestAnimationFrame(anim); } 
-    anim();
 
     init();
 </script>
 </body>
 </html>
-
