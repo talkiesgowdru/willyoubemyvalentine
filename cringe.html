@@ -14,7 +14,6 @@
             --apple-glass: rgba(28, 28, 30, 0.85);
             --border: rgba(255, 255, 255, 0.12);
             --accent: #ff3b30;
-            --safe-bottom: 160px; 
         }
 
         body, html {
@@ -36,13 +35,14 @@
 
         .app-shell {
             height: 100svh; display: flex; flex-direction: column;
-            box-sizing: border-box; padding-bottom: var(--safe-bottom);
+            box-sizing: border-box;
             position: relative; z-index: 10;
         }
 
         .scroll-stage {
-            flex-grow: 1; overflow-y: scroll; padding: 120px 20px 60px;
+            flex-grow: 1; overflow-y: auto; padding: 120px 20px 0;
             scrollbar-width: none; position: relative;
+            -webkit-overflow-scrolling: touch;
         }
         .scroll-stage::-webkit-scrollbar { display: none; }
 
@@ -60,7 +60,6 @@
             column-gap: 20px; 
             max-width: 1100px; 
             margin: 0 auto; 
-            min-height: 200px; /* Forces visibility */
         }
 
         .media-card {
@@ -68,11 +67,10 @@
             background: var(--apple-glass); border-radius: 24px;
             border: 1px solid var(--border); overflow: hidden;
             cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative; background-size: cover;
+            position: relative;
         }
         .media-card:hover { transform: scale(1.02) translateY(-5px); border-color: var(--accent); }
         
-        /* Ensures cards occupy space even before media loads */
         .media-card img, .media-card video { 
             width: 100%; 
             min-height: 150px; 
@@ -80,6 +78,9 @@
             border-radius: 22px; 
             object-fit: cover;
         }
+
+        /* Essential Spacer for Premium Feel and Visibility */
+        .bottom-spacer { height: 180px; width: 100%; clear: both; }
 
         #focusView {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98);
@@ -89,7 +90,11 @@
         #focusContainer { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
         .focus-media { max-width: 95%; max-height: 85vh; border-radius: 20px; box-shadow: 0 50px 100px rgba(0,0,0,1); }
 
-        @media (max-width: 600px) { .grid { column-count: 1; } }
+        @media (max-width: 600px) { 
+            .grid { column-count: 1; } 
+            .back-nav { top: 20px; left: 20px; padding: 10px 20px; font-size: 0.65rem; }
+            .bottom-spacer { height: 140px; }
+        }
     </style>
 </head>
 <body>
@@ -128,6 +133,8 @@
                     <video src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770103929/vide5_gni5nh.mp4" loop muted playsinline preload="auto"></video>
                 </div>
             </div>
+
+            <div class="bottom-spacer"></div>
         </div>
     </div>
 
@@ -172,24 +179,31 @@
             }});
         }
 
-        // Surgical Kinetic Preview Logic
+        // Logic for Mobile (Auto-play on scroll) and Desktop (Hover)
         window.addEventListener('load', () => {
-            document.querySelectorAll('.media-card video').forEach(v => {
-                v.muted = true;
-                v.parentElement.addEventListener('mouseenter', () => {
-                    const playPromise = v.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => { console.log("Autoplay prevented"); });
-                    }
-                });
-                v.parentElement.addEventListener('mouseleave', () => { 
-                    v.pause(); 
-                    v.currentTime = 0; 
-                });
+            const videos = document.querySelectorAll('.media-card video');
+            
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.play().catch(() => {});
+                        } else {
+                            entry.target.pause();
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                videos.forEach(v => observer.observe(v));
+            }
+
+            // Keep hover logic for desktop precision
+            videos.forEach(v => {
+                v.parentElement.addEventListener('mouseenter', () => v.play().catch(() => {}));
+                v.parentElement.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
             });
         });
 
-        // Atmosphere Dust Simulation
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -201,5 +215,3 @@
     </script>
 </body>
 </html>
-
-
