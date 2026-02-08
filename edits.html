@@ -17,11 +17,10 @@
         }
 
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
+            margin: 0; padding: 0; width: 100%; height: 100svh;
             font-family: 'Inter', -apple-system, sans-serif;
             background: var(--bg); color: #fff;
             overflow: hidden; -webkit-font-smoothing: antialiased;
-            overscroll-behavior: none;
         }
 
         #canvas { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
@@ -36,22 +35,22 @@
         .orb-2 { width: 50vw; height: 50vw; background: #5856d6; bottom: -10%; right: -10%; }
 
         .back-nav {
-            position: fixed; top: 40px; left: 40px; z-index: 999;
+            position: fixed; top: 30px; left: 30px; z-index: 999;
             text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
             font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px;
-            background: var(--apple-blur); padding: 14px 28px; border-radius: 50px;
+            background: var(--apple-blur); padding: 12px 24px; border-radius: 50px;
             backdrop-filter: blur(25px); border: 1px solid var(--border);
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .back-nav:hover { background: #fff; color: #000; transform: scale(1.05); }
 
         .scroll-stage {
-            height: 100vh; overflow-y: scroll; padding: 160px 5vw 100px;
+            height: 100svh; overflow-y: auto; padding: 140px 5vw 0;
             scrollbar-width: none; position: relative; z-index: 10;
+            -webkit-overflow-scrolling: touch;
         }
         .scroll-stage::-webkit-scrollbar { display: none; }
 
-        .header-section { text-align: center; margin-bottom: 100px; }
+        .header-section { text-align: center; margin-bottom: 80px; }
         .header-section h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 10vw, 6rem); font-weight: 700; margin: 0; letter-spacing: -2px; }
 
         .grid-container {
@@ -69,20 +68,20 @@
         }
         .video-object:hover { transform: translateY(-8px); z-index: 20; }
 
-        video { width: 100%; height: auto; display: block; opacity: 0.6; transition: 0.6s ease; background: #000; }
+        video { width: 100%; height: auto; display: block; opacity: 0.7; transition: 0.6s ease; background: #000; }
         .video-object:hover video { opacity: 1; filter: saturate(1.1); }
 
         .metadata {
             position: absolute; inset: 0;
             background: linear-gradient(to top, rgba(0,0,0,0.85), transparent 60%);
             display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 30px; opacity: 0; transition: 0.4s ease;
+            padding: 30px; opacity: 1; /* Always visible on mobile for better context */
         }
-        .video-object:hover .metadata { opacity: 1; }
-        .metadata h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.8rem; margin: 0; }
-        .metadata .label-tag { font-size: 0.65rem; font-weight: 900; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
+        .metadata h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; margin: 0; }
+        .metadata .label-tag { font-size: 0.6rem; font-weight: 900; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
 
-        /* PRO PLAYER OVERHAUL */
+        .bottom-spacer { height: 180px; width: 100%; clear: both; }
+
         #proPlayer {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98);
             backdrop-filter: blur(60px); z-index: 50000;
@@ -105,23 +104,22 @@
             pointer-events: auto; background: var(--apple-blur); border: 1px solid var(--border);
             color: white; width: 60px; height: 60px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
-            font-size: 1.2rem; transition: 0.3s;
+            transition: 0.3s;
         }
-        .nav-arrow:hover { background: white; color: black; transform: scale(1.1); }
 
         .exit-btn {
             position: absolute; top: 30px; right: 30px; z-index: 60001;
             width: 50px; height: 50px; background: var(--apple-blur);
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             cursor: pointer; border: 1px solid var(--border); color: white;
-            transition: 0.3s;
         }
-        .exit-btn:hover { background: var(--accent); border-color: var(--accent); }
 
         @media (max-width: 768px) {
-            .nav-arrow { width: 50px; height: 50px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); }
-            .back-nav { top: 20px; left: 20px; padding: 10px 20px; }
+            .nav-arrow { width: 50px; height: 50px; background: rgba(0,0,0,0.5); }
+            .back-nav { top: 20px; left: 20px; padding: 10px 20px; font-size: 0.65rem; }
             #masterStream { max-width: 100%; max-height: 70vh; }
+            .bottom-spacer { height: 140px; }
+            .metadata { padding: 20px; }
         }
     </style>
 </head>
@@ -153,6 +151,8 @@
             <div class="video-object" onclick="openPlayer(6)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770464226/video_2026-02-07_17-06-16_j8iwqp.mp4"></video><div class="metadata"><div class="label-tag">07</div><h3>Mine</h3></div></div>
             <div class="video-object" onclick="openPlayer(7)"><video muted playsinline preload="metadata"><source src="https://res.cloudinary.com/ddmom8wg7/video/upload/v1770464251/video_2026-02-07_17-06-10_lfslxv.mp4"></video><div class="metadata"><div class="label-tag">08</div><h3>Everything</h3></div></div>
         </div>
+
+        <div class="bottom-spacer"></div>
     </div>
 
     <div id="proPlayer">
@@ -231,22 +231,23 @@
             }});
         }
 
-        // Click event listeners with propagation stop
-        document.getElementById('prevArrow').onclick = (e) => { e.preventDefault(); e.stopPropagation(); changeSlide(-1); };
-        document.getElementById('nextArrow').onclick = (e) => { e.preventDefault(); e.stopPropagation(); changeSlide(1); };
+        document.getElementById('prevArrow').onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
+        document.getElementById('nextArrow').onclick = (e) => { e.stopPropagation(); changeSlide(1); };
 
-        window.addEventListener('keydown', (e) => {
-            if (player.style.display === 'flex') {
-                if (e.key === 'ArrowRight') changeSlide(1);
-                if (e.key === 'ArrowLeft') changeSlide(-1);
-                if (e.key === 'Escape') terminate();
-            }
+        // Mobile Intersection Observer for Video Previews
+        window.addEventListener('load', () => {
+            const previewVids = document.querySelectorAll('.video-object video');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { entry.target.play().catch(() => {}); }
+                    else { entry.target.pause(); }
+                });
+            }, { threshold: 0.5 });
+            previewVids.forEach(v => observer.observe(v));
         });
 
-        // FIXED SWIPE LOGIC
         let tsX = 0;
-        player.addEventListener('touchstart', e => { tsX = e.changedTouches[0].screenX; }, {passive: false});
-        player.addEventListener('touchmove', e => { if (player.style.display === 'flex') e.preventDefault(); }, {passive: false});
+        player.addEventListener('touchstart', e => { tsX = e.changedTouches[0].screenX; }, {passive: true});
         player.addEventListener('touchend', e => {
             let teX = e.changedTouches[0].screenX;
             if (teX < tsX - 60) changeSlide(1); 
