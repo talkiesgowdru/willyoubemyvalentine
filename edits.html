@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Edits </title>
+    <title>Edits</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -21,6 +21,7 @@
             font-family: 'Inter', -apple-system, sans-serif;
             background: var(--bg); color: #fff;
             overflow: hidden; -webkit-font-smoothing: antialiased;
+            overscroll-behavior: none;
         }
 
         #canvas { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
@@ -34,15 +35,13 @@
         .orb-1 { width: 60vw; height: 60vw; background: var(--accent); top: -10%; left: -10%; }
         .orb-2 { width: 50vw; height: 50vw; background: #5856d6; bottom: -10%; right: -10%; }
 
-        /* FIXED NAVIGATION */
         .back-nav {
-            position: fixed; top: 40px; left: 40px; z-index: 9999;
+            position: fixed; top: 40px; left: 40px; z-index: 999;
             text-decoration: none; color: #fff; display: flex; align-items: center; gap: 12px;
             font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px;
             background: var(--apple-blur); padding: 14px 28px; border-radius: 50px;
             backdrop-filter: blur(25px); border: 1px solid var(--border);
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: auto;
         }
         .back-nav:hover { background: #fff; color: #000; transform: scale(1.05); }
 
@@ -70,7 +69,6 @@
         }
         .video-object:hover { transform: translateY(-8px); z-index: 20; }
 
-        /* LOADING OPTIMIZATION: Ensure videos don't stall the page */
         video { width: 100%; height: auto; display: block; opacity: 0.6; transition: 0.6s ease; background: #000; }
         .video-object:hover video { opacity: 1; filter: saturate(1.1); }
 
@@ -84,35 +82,46 @@
         .metadata h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.8rem; margin: 0; }
         .metadata .label-tag { font-size: 0.65rem; font-weight: 900; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
 
+        /* PRO PLAYER OVERHAUL */
         #proPlayer {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98);
-            backdrop-filter: blur(60px); z-index: 5000;
+            backdrop-filter: blur(60px); z-index: 50000;
             display: none; justify-content: center; align-items: center;
             opacity: 0; transition: opacity 0.5s ease;
             touch-action: none;
         }
-        #proPlayer video { max-width: 90%; max-height: 85vh; border-radius: 12px; object-fit: contain; z-index: 5001; }
+        #masterStream { 
+            max-width: 95%; max-height: 80vh; 
+            border-radius: 12px; object-fit: contain; 
+            z-index: 50001; position: relative;
+        }
         
-        .touch-shield { position: absolute; inset: 0; z-index: 5002; }
-
         .slider-nav {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute; inset: 0;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 30px; pointer-events: none; z-index: 5003;
+            padding: 0 20px; pointer-events: none; z-index: 60000;
         }
         .nav-arrow {
             pointer-events: auto; background: var(--apple-blur); border: 1px solid var(--border);
-            color: white; width: 55px; height: 55px; border-radius: 50%;
+            color: white; width: 60px; height: 60px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
-            font-size: 1rem; transition: 0.3s;
+            font-size: 1.2rem; transition: 0.3s;
         }
-        .nav-arrow:hover { background: white; color: black; }
+        .nav-arrow:hover { background: white; color: black; transform: scale(1.1); }
 
         .exit-btn {
-            position: absolute; top: 40px; right: 40px; z-index: 5004;
+            position: absolute; top: 30px; right: 30px; z-index: 60001;
             width: 50px; height: 50px; background: var(--apple-blur);
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             cursor: pointer; border: 1px solid var(--border); color: white;
+            transition: 0.3s;
+        }
+        .exit-btn:hover { background: var(--accent); border-color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .nav-arrow { width: 50px; height: 50px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); }
+            .back-nav { top: 20px; left: 20px; padding: 10px 20px; }
+            #masterStream { max-width: 100%; max-height: 70vh; }
         }
     </style>
 </head>
@@ -147,7 +156,7 @@
     </div>
 
     <div id="proPlayer">
-        <div class="touch-shield"></div> <div class="exit-btn" onclick="terminate()"><i class="fas fa-times"></i></div>
+        <div class="exit-btn" onclick="terminate()"><i class="fas fa-times"></i></div>
         <div class="slider-nav">
             <div class="nav-arrow" id="prevArrow"><i class="fas fa-chevron-left"></i></div>
             <div class="nav-arrow" id="nextArrow"><i class="fas fa-chevron-right"></i></div>
@@ -195,13 +204,6 @@
             gsap.to("#orb2", { x: (e.clientX - window.innerWidth/2) * -0.05, duration: 1 });
         });
 
-        // OPTIMIZED GRID PLAYBACK
-        document.querySelectorAll('.video-object video').forEach(v => {
-            const obj = v.closest('.video-object');
-            obj.addEventListener('mouseenter', () => { v.play(); });
-            obj.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
-        });
-
         function openPlayer(index) {
             currentIndex = index;
             updateStream();
@@ -229,8 +231,9 @@
             }});
         }
 
-        document.getElementById('prevArrow').onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
-        document.getElementById('nextArrow').onclick = (e) => { e.stopPropagation(); changeSlide(1); };
+        // Click event listeners with propagation stop
+        document.getElementById('prevArrow').onclick = (e) => { e.preventDefault(); e.stopPropagation(); changeSlide(-1); };
+        document.getElementById('nextArrow').onclick = (e) => { e.preventDefault(); e.stopPropagation(); changeSlide(1); };
 
         window.addEventListener('keydown', (e) => {
             if (player.style.display === 'flex') {
@@ -240,16 +243,17 @@
             }
         });
 
+        // FIXED SWIPE LOGIC
         let tsX = 0;
-        player.addEventListener('touchstart', e => { tsX = e.changedTouches[0].screenX; }, {passive: true});
+        player.addEventListener('touchstart', e => { tsX = e.changedTouches[0].screenX; }, {passive: false});
+        player.addEventListener('touchmove', e => { if (player.style.display === 'flex') e.preventDefault(); }, {passive: false});
         player.addEventListener('touchend', e => {
             let teX = e.changedTouches[0].screenX;
-            if (teX < tsX - 50) changeSlide(1); 
-            if (teX > tsX + 50) changeSlide(-1); 
+            if (teX < tsX - 60) changeSlide(1); 
+            if (teX > tsX + 60) changeSlide(-1); 
         }, {passive: true});
 
         gsap.from(".video-object", { duration: 1.2, y: 50, opacity: 0, stagger: 0.12, ease: "power4.out" });
     </script>
 </body>
 </html>
-
